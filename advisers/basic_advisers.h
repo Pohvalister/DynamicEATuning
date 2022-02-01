@@ -1,13 +1,6 @@
 #ifndef ONEPLUSLL_PARAMETER_ADVISOR_H
 #define ONEPLUSLL_PARAMETER_ADVISOR_H
-#include <vector>
-
-template<typename Parameters>
-class ParameterAdvisor{
-    ParameterAdvisor(Parameters params) = 0;
-    Parameters get_advice(std::set<std::pair<double, std::vector<bool>>>) = 0;
-};
-
+#include "advisor_interface.h"
 
 template<typename Parameters>
 class OneFifth : public ParameterAdvisor<Parameters>{
@@ -16,7 +9,7 @@ class OneFifth : public ParameterAdvisor<Parameters>{
         m_advice.iterations = ITERATIONS_FOR_TEST;
     }
 
-    Parameters get_advice(std::set<std::pair<double, std::vector<bool>>> newRuns) {
+    Parameters get_advice(const std::set<std::pair<double, std::vector<bool>>>& newRuns) {
         if (newRuns.size() < 2){
             m_advice.mutation_phase_population_size *= MUTATION_LAMBDA_INCREASE;
             m_advice.crossover_phase_population_size *= CROSSOVER_LAMBDA_INCREASE;
@@ -41,7 +34,7 @@ class ABtune : public ParameterAdvisor<Parameters>{
         m_advice.crossover_phase_population_size = STARTING_LAMBDA;
     }
 
-    Parameters get_advice(std::set<std::pair<double, std::vector<bool>>> newRuns){
+    Parameters get_advice(const std::set<std::pair<double, std::vector<bool>>>& newRuns){
         if (!newRuns.empty())
             lambda = (lambda * A_VALUE < ProblemSize ? lambda * A_VALUE : ProblemSize);
         else

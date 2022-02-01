@@ -8,24 +8,27 @@
 #include "datapar.hpp"
 
 #include "ea_parameters.h"
-#include "parameter_advisor.h"
-
-template<std::size_t ProblemSize, typename Advisor>
-class EA{
-public:
-    virtual void run_search() = 0;
-};
+#include "solver_interface.h"
+#include "tasks/task_interface.h"
+#include "advisers/adviser_interface.h"
 
 using namespace pasl::pctl;
 
-template<std::size_t ProblemSize, typename Advisor>
+struct OnePlusLL_param : public VariableParameters{
+    int mutation_phase_population_size; //L1
+    int crossover_phase_population_size; //L2
+    double mutation_coefficient; //k
+    double crossover_probability; //c
+};
+
+template<std::size_t ProblemSize>
 class OnePlusLambdaLambdaGA : public EA<ProblemSize, Advisor>
 {
 public:
     using species = bool[ProblemSize];
 
-    OnePlusLambdaLambdaGA(const std::function<double(species)>& f, int populationSize, const std::set<species>& sample);
-    OnePlusLambdaLambdaGA(const std::function<double(species)>& f, int populationSize);
+    OnePlusLambdaLambdaGA(const std::function<double(species)>& f, const std::set<species>& sample);
+    OnePlusLambdaLambdaGA(const std::function<double(species)>& f);
 
     std::pair<double, std::vector<bool>> run_search();
 private:

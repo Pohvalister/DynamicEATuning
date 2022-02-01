@@ -9,7 +9,7 @@ int main() {
         return 1.5;
     };
 
-    ONEPlLL<10> algo(f,10,std::set<bool[10]>());
+    //ONEPlLL<10> algo(f,10,std::set<bool[10]>());
 
     return 0;
 }
